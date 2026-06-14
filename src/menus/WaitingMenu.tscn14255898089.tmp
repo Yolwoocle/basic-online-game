@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://btkfue24fcepx"]
+
+[ext_resource type="Script" uid="uid://bytivt0kop1ie" path="res://src/menus/WaitingMenu.gd" id="1_wa2hi"]
+
+[node name="WaitingMenu" type="Control" unique_id=1640786407]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wa2hi")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=962853038]
+custom_minimum_size = Vector2(214, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(0.16470589, 0.16470589, 0.16470589, 0.3254902)
+
+[node name="Chat" type="VBoxContainer" parent="." unique_id=1675369780]
+layout_mode = 0
+offset_left = 754.0
+offset_top = 7.0
+offset_right = 954.0
+offset_bottom = 533.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Chat" unique_id=1157072254]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+horizontal_scroll_mode = 3
+
+[node name="ChatLabel" type="Label" parent="Chat/ScrollContainer" unique_id=1924370120]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Chat" unique_id=493860836]
+layout_mode = 2
+
+[node name="TextEdit" type="TextEdit" parent="Chat/HBoxContainer" unique_id=220617031]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Chat"
+
+[node name="SendChatButton" type="Button" parent="Chat/HBoxContainer" unique_id=1212565890]
+layout_mode = 2
+text = "Send"
+
+[node name="LeaveLobbyButton" type="Button" parent="." unique_id=549584395]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 5.0
+offset_right = 132.0
+offset_bottom = 36.0
+text = "Leave lobby"
+
+[node name="UserInfoLabel" type="Label" parent="." unique_id=818549133]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 0
+offset_left = 9.0
+offset_top = 42.0
+offset_right = 159.0
+offset_bottom = 65.0
+text = "xxx"
+autowrap_mode = 2
+
+[node name="PlayerList" type="VBoxContainer" parent="." unique_id=871681507]
+layout_mode = 0
+offset_left = 396.0
+offset_top = 418.0
+offset_right = 646.0
+offset_bottom = 511.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlayerList" unique_id=1475961769]
+layout_mode = 2
+
+[node name="SkinMinus1" type="Button" parent="PlayerList/HBoxContainer" unique_id=400752352]
+layout_mode = 2
+text = "Skin -1"
+
+[node name="SkinPlus1" type="Button" parent="PlayerList/HBoxContainer" unique_id=1961896922]
+layout_mode = 2
+text = "Skin +1"
+
+[connection signal="pressed" from="Chat/HBoxContainer/SendChatButton" to="." method="_on_send_chat_button_pressed"]
+[connection signal="pressed" from="LeaveLobbyButton" to="." method="_on_leave_lobby_button_pressed"]
+[connection signal="pressed" from="PlayerList/HBoxContainer/SkinMinus1" to="." method="_on_skin_minus_1_pressed"]
+[connection signal="pressed" from="PlayerList/HBoxContainer/SkinPlus1" to="." method="_on_skin_plus_1_pressed"]

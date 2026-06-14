@@ -1,0 +1,191 @@
+[gd_scene format=3 uid="uid://mjt3lrjwjeue"]
+
+[ext_resource type="Script" uid="uid://cs88c22p0u8rv" path="res://src/actors/Player.gd" id="1_bkjfp"]
+[ext_resource type="Texture2D" uid="uid://j6kw5m8n8v22" path="res://assets/character_green_idle.png" id="2_bkjfp"]
+[ext_resource type="Texture2D" uid="uid://cb7ro0pipi7ie" path="res://assets/character_green_walk_a.png" id="3_bgvai"]
+[ext_resource type="Texture2D" uid="uid://2pn2bqf2keen" path="res://assets/character_green_walk_b.png" id="4_iitbv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gmfve"]
+radius = 20.024984
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pt4dq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_bkjfp")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_bgvai")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_iitbv")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_gfmwy"]
+resource_name = "Idle"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Idle"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_srysr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Walk"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_d23sc"]
+resource_name = "Walk"
+length = 0.2
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Walk"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -14)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5k0d4"]
+_data = {
+&"Idle": SubResource("Animation_gfmwy"),
+&"RESET": SubResource("Animation_srysr"),
+&"Walk": SubResource("Animation_d23sc")
+}
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gmfve"]
+properties/0/path = NodePath(".:multiplayer_position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:multiplayer_input")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("AnimationPlayer:current_animation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("AnimatedSprite2D:flip_h")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+
+[node name="Player" type="CharacterBody2D" unique_id=1158685969]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_bkjfp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=761670582]
+shape = SubResource("CircleShape2D_gmfve")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=768710121]
+position = Vector2(0, -13.999999)
+scale = Vector2(0.515625, 0.515625)
+sprite_frames = SubResource("SpriteFrames_pt4dq")
+animation = &"Walk"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2078751958]
+root_node = NodePath("../AnimatedSprite2D")
+libraries/ = SubResource("AnimationLibrary_5k0d4")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1948760595]
+replication_config = SubResource("SceneReplicationConfig_gmfve")
+
+[node name="UsernameLabel" type="Label" parent="." unique_id=1959228927]
+offset_left = -142.0
+offset_top = -60.0
+offset_right = 142.0
+offset_bottom = -37.0
+horizontal_alignment = 1
+
+[connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]

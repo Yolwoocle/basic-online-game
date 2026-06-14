@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://5el0lx7t73p5"]
+
+[ext_resource type="Script" uid="uid://fuygx7rpeo4j" path="res://src/scenes/Level.gd" id="1_lr8mv"]
+
+[sub_resource type="TileSet" id="TileSet_lr8mv"]
+
+[node name="Level" type="Node2D" unique_id=1678311567]
+script = ExtResource("1_lr8mv")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1768009979]
+tile_set = SubResource("TileSet_lr8mv")
+
+[node name="Actors" type="Node2D" parent="." unique_id=534516377]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1628048609]
+_spawnable_scenes = PackedStringArray("uid://mjt3lrjwjeue")
+spawn_path = NodePath("../Actors")
