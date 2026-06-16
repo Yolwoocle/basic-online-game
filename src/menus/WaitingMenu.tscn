@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://btkfue24fcepx"]
 
+[ext_resource type="Theme" uid="uid://ckkx0ef82y2pc" path="res://src/menus/default_theme.tres" id="1_6p5i1"]
 [ext_resource type="Script" uid="uid://bytivt0kop1ie" path="res://src/menus/WaitingMenu.gd" id="1_wa2hi"]
 
 [node name="WaitingMenu" type="Control" unique_id=1640786407]
@@ -9,7 +10,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_6p5i1")
 script = ExtResource("1_wa2hi")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1358870540]
+custom_minimum_size = Vector2(214, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=962853038]
 custom_minimum_size = Vector2(214, 0)
@@ -20,7 +31,24 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 2
-color = Color(0.16470589, 0.16470589, 0.16470589, 0.3254902)
+color = Color(0.16, 0.16, 0.16, 0.4862745)
+
+[node name="PlayerPreviews" type="HBoxContainer" parent="." unique_id=1968056191]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 52.0
+offset_right = 741.0
+offset_bottom = 462.0
+
+[node name="InfoLabel" type="Label" parent="." unique_id=1405917174]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 754.0
+offset_top = 7.0
+offset_right = 954.0
+offset_bottom = 27.0
+autowrap_mode = 2
 
 [node name="Chat" type="VBoxContainer" parent="." unique_id=1675369780]
 layout_mode = 0
@@ -47,7 +75,7 @@ autowrap_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="Chat" unique_id=493860836]
 layout_mode = 2
 
-[node name="TextEdit" type="TextEdit" parent="Chat/HBoxContainer" unique_id=220617031]
+[node name="TextEdit" type="LineEdit" parent="Chat/HBoxContainer" unique_id=2650902]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -55,6 +83,7 @@ size_flags_horizontal = 3
 placeholder_text = "Chat"
 
 [node name="SendChatButton" type="Button" parent="Chat/HBoxContainer" unique_id=1212565890]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 text = "Send"
 
@@ -68,43 +97,25 @@ text = "Leave lobby"
 
 [node name="StartGameButton" type="Button" parent="." unique_id=745235041]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 80)
+custom_minimum_size = Vector2(80, 50)
 layout_mode = 0
-offset_left = 376.0
-offset_top = 430.0
-offset_right = 501.0
-offset_bottom = 510.0
+offset_left = 306.0
+offset_top = 476.0
+offset_right = 431.0
+offset_bottom = 526.0
 text = "START!"
 
-[node name="UserInfoLabel" type="Label" parent="." unique_id=818549133]
+[node name="AddPlayerButton" type="Button" parent="." unique_id=1915999315]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(250, 0)
+custom_minimum_size = Vector2(80, 50)
 layout_mode = 0
-offset_left = 9.0
-offset_top = 42.0
-offset_right = 159.0
-offset_bottom = 65.0
-text = "xxx"
-autowrap_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1475961769]
-layout_mode = 0
-offset_left = 12.0
-offset_top = 496.0
-offset_right = 140.0
-offset_bottom = 527.0
-size_flags_horizontal = 4
-
-[node name="SkinMinus1" type="Button" parent="HBoxContainer" unique_id=400752352]
-layout_mode = 2
-text = "Skin -1"
-
-[node name="SkinPlus1" type="Button" parent="HBoxContainer" unique_id=1961896922]
-layout_mode = 2
-text = "Skin +1"
+offset_left = 18.0
+offset_top = 474.0
+offset_right = 143.0
+offset_bottom = 524.0
+text = "Add player"
 
 [connection signal="pressed" from="Chat/HBoxContainer/SendChatButton" to="." method="_on_send_chat_button_pressed"]
 [connection signal="pressed" from="LeaveLobbyButton" to="." method="_on_leave_lobby_button_pressed"]
 [connection signal="pressed" from="StartGameButton" to="." method="_on_start_game_button_pressed"]
-[connection signal="pressed" from="HBoxContainer/SkinMinus1" to="." method="_on_skin_minus_1_pressed"]
-[connection signal="pressed" from="HBoxContainer/SkinPlus1" to="." method="_on_skin_plus_1_pressed"]
+[connection signal="pressed" from="AddPlayerButton" to="." method="_on_add_player_button_pressed"]

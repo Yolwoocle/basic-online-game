@@ -1,16 +1,23 @@
 extends Node
 
-signal peer_connected
-signal peer_disconnected
-signal server_opened
-signal connected_to_server
-signal connection_failed
-signal server_disconnected
+signal peer_connected(multiplayer_id: int)
+signal peer_disconnected(multiplayer_id: int)
+signal user_added(user_id: int)
+signal user_removed(user_id: int)
+
+signal server_opened()
+signal connected_to_server()
+signal connection_failed()
+signal server_disconnected()
+
+signal user_data_changed(user_id: int, key: String, new_value: Variant)
 
 const DEFAULT_PORT = 9999
 
 var users: Dictionary[int, UserData] = {}
 var local_users: Dictionary[int, UserData] = {}
+
+var join_order = 0
 
 
 func _ready() -> void:
@@ -20,46 +27,10 @@ func _ready() -> void:
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 	server_opened.connect(_on_server_opened)
-	
-	add_local_user()
 
 
 func reset() -> void:
 	users.clear()
-
-
-func create_client(ip_address: String, port: int = DEFAULT_PORT) -> Error:
-	reset()
-	var peer = ENetMultiplayerPeer.new()
-	var err: Error = peer.create_client(ip_address, port)
-	if err:
-		print("Error creating client: %s" % [error_string(err)])
-		return err
-	
-	print("Created client.")
-	multiplayer.multiplayer_peer = peer
-	return err
-
-
-func create_server(port: int = DEFAULT_PORT) -> Error:
-	reset()
-	var peer = ENetMultiplayerPeer.new()
-	var err: Error = peer.create_server(port)
-	
-	if err:
-		print("Error creating server: %s" % [error_string(err)])
-		return err
-		
-	print("Created server.")
-	
-	multiplayer.multiplayer_peer = peer
-	for data in local_users.values():
-		data.multiplayer_id = get_unique_id()
-		_add_user(data.user_id, data.to_dict())
-	
-	server_opened.emit()
-	
-	return err
 
 
 func disconnect_multiplayer() -> void:
@@ -67,7 +38,7 @@ func disconnect_multiplayer() -> void:
 	reset()
 
 
-func get_unique_id() -> int:
+func get_multiplayer_id() -> int:
 	return multiplayer.get_unique_id()
 
 
@@ -75,22 +46,46 @@ func is_server() -> bool:
 	return multiplayer.is_server()
 
 
-func add_local_user():
+func add_local_user() -> int:
 	var user = UserData.new()
+	var user_id = randi_range(1, 2_147_483_646) # max int
 	
 	user.username = _get_system_username() + str(randi_range(100, 999))
-	user.user_id = randi_range(1, 2_147_483_646) # max int
+	user.user_id = user_id
 	
-	local_users[user.user_id] = user
+	local_users[user_id] = user
+	register_user.rpc_id(1, user_id, user.to_dict())
+	
+	return user_id
 
 
-@rpc("any_peer", "call_remote", "reliable")
+func remove_local_user(user_id: int):
+	if not local_users.has(user_id):
+		return
+	var user = get_user(user_id)
+	if not user.is_local():
+		return
+	
+	unregister_user.rpc_id(1, user.user_id)
+	local_users.erase(user.user_id)
+
+
+@rpc("any_peer", "call_local", "reliable")
 func register_user(user_id: int, user_dict: Dictionary):
 	if not is_server():
 		return
 	
 	user_dict["multiplayer_id"] = multiplayer.get_remote_sender_id()
 	_add_user.rpc(user_id, user_dict)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func unregister_user(user_id: int):
+	if not is_server():
+		return
+	if not users.has(user_id):
+		return
+	_remove_user.rpc(user_id)
 
 
 func get_user(user_id: int) -> UserData:
@@ -139,12 +134,27 @@ func is_user_local(user_id: int):
 	if not has_user(user_id):
 		return -1
 	
-	return get_user(user_id).multiplayer_id == get_unique_id()
+	return get_user(user_id).multiplayer_id == get_multiplayer_id()
 
 
 ################################################################################
 ## Server 
 ################################################################################
+
+func create_server(port: int = DEFAULT_PORT) -> Error:
+	reset()
+	var peer = ENetMultiplayerPeer.new()
+	var err: Error = peer.create_server(port)
+	
+	if err:
+		print("Error creating server: %s" % [error_string(err)])
+		return err
+	
+	multiplayer.multiplayer_peer = peer
+	server_opened.emit()
+	
+	return err
+
 
 func _update_client_with_current_users(multiplayer_id: int):
 	for existing_user_id in users:
@@ -168,13 +178,30 @@ func _server_update_user_data(user_id: int, key: String, value: Variant):
 ################################################################################
 
 
+func create_client(ip_address: String, port: int = DEFAULT_PORT) -> Error:
+	reset()
+	var peer = ENetMultiplayerPeer.new()
+	var err: Error = peer.create_client(ip_address, port)
+	if err:
+		print("Error creating client: %s" % [error_string(err)])
+		return err
+	
+	multiplayer.multiplayer_peer = peer
+	return err
+
+
 @rpc("authority", "call_local", "reliable")
 func _add_user(user_id: int, user_dict: Dictionary) -> void:
-	users[user_id] = UserData.from_dict(user_dict) 
+	users[user_id] = UserData.from_dict(user_dict)
+	user_added.emit(user_id)
 
 
 @rpc("authority", "call_local", "reliable")
 func _remove_user(user_id: int) -> void:
+	if not users.has(user_id):
+		return
+	
+	user_removed.emit(user_id)
 	users.erase(user_id)
 
 
@@ -182,6 +209,7 @@ func _remove_user(user_id: int) -> void:
 func _set_user_data(user_id: int, key: String, value: Variant):
 	if users.has(user_id):
 		users[user_id].set(key, value)
+		user_data_changed.emit(user_id, key, value)
 
 
 ################################################################################
@@ -190,8 +218,6 @@ func _set_user_data(user_id: int, key: String, value: Variant):
 
 
 func _on_peer_connected(multiplayer_id: int) -> void:
-	print("Peer %s connected." % [multiplayer_id])
-	Chat.add_message("Peer %s connected." % [multiplayer_id])
 	peer_connected.emit(multiplayer_id)
 	
 	if is_server():
@@ -199,33 +225,28 @@ func _on_peer_connected(multiplayer_id: int) -> void:
 
 
 func _on_peer_disconnected(multiplayer_id: int) -> void:
-	print("Peer %s disconnected." % [multiplayer_id])
-	Chat.add_message("Peer %s disconnected." % [multiplayer_id])
 	peer_disconnected.emit(multiplayer_id)
 	
 	if is_server():
 		for user_id in users.keys():
 			if users[user_id].multiplayer_id == multiplayer_id:
-				_remove_user.rpc(user_id)
+				unregister_user.rpc_id(1, user_id)
 
 
 func _on_server_opened() -> void:
-	print("Server opened.")
-
+	pass
 
 func _on_connected_to_server() -> void:
-	print("Connected to server.")
 	Chat.add_message("Connected to server.")
 	connected_to_server.emit()
 	
 	# Register users to the server
 	for user in local_users.values():
-		user.multiplayer_id = get_unique_id()
+		user.multiplayer_id = get_multiplayer_id()
 		register_user.rpc_id(1, user.user_id, user.to_dict())
 
 
 func _on_connection_failed() -> void:
-	print("Connection failed.")
 	Chat.add_message("Connection failed.")
 	connection_failed.emit()
 	
@@ -233,7 +254,6 @@ func _on_connection_failed() -> void:
 
 
 func _on_server_disconnected() -> void:
-	print("Server disconnected.")
 	Chat.add_message("Server disconnected.")
 	server_disconnected.emit()
 	
@@ -251,4 +271,4 @@ func _get_system_username() -> String:
 	elif OS.has_environment("USER"):
 		return OS.get_environment("USER") # Linux and macOS
 	
-	return "Username" # Fallback 
+	return "Username" # Fallback

@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://c03qadfkk2ksq"]
+
+[ext_resource type="Theme" uid="uid://ckkx0ef82y2pc" path="res://src/menus/default_theme.tres" id="1_ffw7h"]
+[ext_resource type="Texture2D" uid="uid://j6kw5m8n8v22" path="res://assets/actors/character_green_idle.png" id="1_fxbc8"]
+[ext_resource type="Texture2D" uid="uid://ddu014fcm5a4n" path="res://assets/icons/crown.png" id="2_ffw7h"]
+[ext_resource type="Script" uid="uid://bnvye34hou1r7" path="res://src/menus/WaitingMenuPlayerCell.gd" id="2_x01d1"]
+
+[node name="WaitingMenuPlayerCell" type="MarginContainer" unique_id=563112355]
+custom_minimum_size = Vector2(183, 410)
+theme = ExtResource("1_ffw7h")
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+script = ExtResource("2_x01d1")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1953168511]
+layout_mode = 2
+color = Color(0.464, 0.54133326, 0.58, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="ColorRect" unique_id=534537415]
+position = Vector2(80, 81)
+scale = Vector2(0.8032707, 0.8032707)
+texture = ExtResource("1_fxbc8")
+
+[node name="PlayerName" type="Label" parent="ColorRect" unique_id=1411313977]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 7.0
+offset_right = 48.0
+offset_bottom = 30.0
+text = "Player123"
+
+[node name="UserID" type="Label" parent="ColorRect" unique_id=2116655101]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 160.0
+offset_right = 90.0
+offset_bottom = 183.0
+text = "UserID: xxx"
+
+[node name="MultID" type="Label" parent="ColorRect" unique_id=772869952]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 182.0
+offset_right = 90.0
+offset_bottom = 205.0
+text = "MultID: xxx"
+
+[node name="Crown" type="Sprite2D" parent="ColorRect" unique_id=1485190994]
+position = Vector2(95, 17)
+texture = ExtResource("2_ffw7h")
+
+[node name="RemoveButton" type="Button" parent="ColorRect" unique_id=958691742]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 0
+offset_left = 74.0
+offset_top = 349.0
+offset_right = 164.0
+offset_bottom = 389.0
+text = "Remove"
+
+[node name="PrevSkinButton" type="Button" parent="ColorRect" unique_id=598827140]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 85.0
+offset_right = 36.0
+offset_bottom = 111.0
+text = "<"
+
+[node name="NextSkinButton" type="Button" parent="ColorRect" unique_id=1239220252]
+layout_mode = 0
+offset_left = 131.0
+offset_top = 84.0
+offset_right = 157.0
+offset_bottom = 110.0
+text = ">"
+
+[connection signal="pressed" from="ColorRect/RemoveButton" to="." method="_on_remove_button_pressed"]
+[connection signal="pressed" from="ColorRect/PrevSkinButton" to="." method="_on_prev_skin_button_pressed"]
+[connection signal="pressed" from="ColorRect/NextSkinButton" to="." method="_on_next_skin_button_pressed"]

@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://vfrikeq3xu4y"]
+
+[ext_resource type="Script" uid="uid://cag3jlo0vi1gq" path="res://src/actors/Actor.gd" id="1_npaqm"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lwvoo"]
+properties/0/path = NodePath(".:multiplayer_position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Actor" type="CharacterBody2D" unique_id=872261653]
+script = ExtResource("1_npaqm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=204835547]
+
+[node name="DefaultMultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1015616588]
+replication_config = SubResource("SceneReplicationConfig_lwvoo")

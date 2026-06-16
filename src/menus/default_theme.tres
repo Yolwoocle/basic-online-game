@@ -1,0 +1,55 @@
+[gd_resource type="Theme" format=3 uid="uid://ckkx0ef82y2pc"]
+
+[ext_resource type="FontFile" uid="uid://34v17wt2fo0q" path="res://assets/font/BalsamiqSans-Regular.ttf" id="1_m06mi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m06mi"]
+bg_color = Color(0.5063, 0.57888997, 0.61, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e500f"]
+bg_color = Color(0.32399997, 0.73710006, 0.81, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ne3gn"]
+bg_color = Color(0.24800001, 0.6343999, 0.8, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r2o04"]
+bg_color = Color(0.195, 0.5187501, 0.75, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7bbl3"]
+bg_color = Color(0.2829, 0.3570417, 0.41, 1)
+border_width_left = 12
+border_width_right = 12
+border_color = Color(0.28235295, 0.35686275, 0.4117647, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[resource]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/fonts/font = ExtResource("1_m06mi")
+Button/styles/disabled = SubResource("StyleBoxFlat_m06mi")
+Button/styles/hover = SubResource("StyleBoxFlat_e500f")
+Button/styles/normal = SubResource("StyleBoxFlat_ne3gn")
+Button/styles/pressed = SubResource("StyleBoxFlat_r2o04")
+Label/fonts/font = ExtResource("1_m06mi")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_7bbl3")

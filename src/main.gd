@@ -2,6 +2,8 @@ class_name Main
 extends Node
 
 func _ready():
+	await get_tree().create_timer(0.05).timeout
+	
 	# Parse arguments
 	var arguments = {}
 	for argument in OS.get_cmdline_args():

@@ -1,6 +1,17 @@
 [gd_scene format=3 uid="uid://drxcy0hrmbc5p"]
 
+[ext_resource type="Theme" uid="uid://ckkx0ef82y2pc" path="res://src/menus/default_theme.tres" id="1_364cn"]
 [ext_resource type="Script" uid="uid://guwxo2mv4fwr" path="res://src/menus/MainMenu.gd" id="1_nv28l"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_364cn"]
+font_color = Color(0.096097104, 0.13129565, 0.1563789, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_d25wi"]
+font_color = Color(0.7419489, 0.18244696, 0.1683465, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ttsup"]
+font_size = 22
+font_color = Color(0.0432, 0.059840005, 0.12, 1)
 
 [node name="MainMenu" type="Control" unique_id=46319657]
 layout_mode = 3
@@ -9,7 +20,40 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_364cn")
 script = ExtResource("1_nv28l")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1236806772]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="." unique_id=1151901629]
+layout_mode = 0
+offset_left = 599.0
+offset_top = 263.0
+offset_right = 636.0
+offset_bottom = 283.0
+text = "Port: "
+label_settings = SubResource("LabelSettings_364cn")
+
+[node name="ErrorLabel" type="Label" parent="." unique_id=383905752]
+layout_mode = 0
+offset_left = 641.0
+offset_top = 296.0
+offset_right = 678.0
+offset_bottom = 316.0
+label_settings = SubResource("LabelSettings_d25wi")
+
+[node name="PortLineEdit" type="LineEdit" parent="." unique_id=354063242]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 258.0
+offset_right = 724.5
+offset_bottom = 289.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=936936767]
 layout_mode = 1
@@ -24,16 +68,20 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 15
 
 [node name="Label" type="Label" parent="VBoxContainer" unique_id=1759104051]
 layout_mode = 2
 text = "Fortnite Battle Royale"
+label_settings = SubResource("LabelSettings_ttsup")
 horizontal_alignment = 1
 
 [node name="HostGameButton" type="Button" parent="VBoxContainer" unique_id=1507212229]
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 text = "Host game"
 
 [node name="JoinGameButton" type="Button" parent="VBoxContainer" unique_id=711579744]
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 text = "Join game"

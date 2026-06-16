@@ -1,14 +1,25 @@
-[gd_scene format=3 uid="uid://mjt3lrjwjeue"]
+[gd_scene format=3 uid="uid://otav1mxtgy3q"]
 
 [ext_resource type="Script" uid="uid://cs88c22p0u8rv" path="res://src/actors/Player.gd" id="1_bkjfp"]
-[ext_resource type="Texture2D" uid="uid://j6kw5m8n8v22" path="res://assets/character_green_idle.png" id="2_bkjfp"]
-[ext_resource type="Texture2D" uid="uid://cb7ro0pipi7ie" path="res://assets/character_green_walk_a.png" id="3_bgvai"]
-[ext_resource type="Texture2D" uid="uid://2pn2bqf2keen" path="res://assets/character_green_walk_b.png" id="4_iitbv"]
+[ext_resource type="PackedScene" uid="uid://vfrikeq3xu4y" path="res://src/actors/Actor.tscn" id="1_gfmwy"]
+[ext_resource type="Texture2D" uid="uid://j6kw5m8n8v22" path="res://assets/actors/character_green_idle.png" id="2_bkjfp"]
+[ext_resource type="Texture2D" uid="uid://cb7ro0pipi7ie" path="res://assets/actors/character_green_walk_a.png" id="3_bgvai"]
+[ext_resource type="Texture2D" uid="uid://2pn2bqf2keen" path="res://assets/actors/character_green_walk_b.png" id="4_iitbv"]
+[ext_resource type="Script" uid="uid://brusmha768hbx" path="res://src/actors/PlayerSprite.gd" id="5_gfmwy"]
+[ext_resource type="Script" uid="uid://cbl2i2u58cfmt" path="res://src/components/Hurtbox.gd" id="5_iitbv"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_gmfve"]
-radius = 20.024984
+[sub_resource type="CircleShape2D" id="CircleShape2D_srysr"]
+radius = 19.026299
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_pt4dq"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_srysr"]
+properties/0/path = NodePath("AnimatedSprite2D:flip_h")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("AnimationPlayer:current_animation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_srysr"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -139,53 +150,54 @@ tracks/2/keys = {
 "values": [Vector2(0, 0), Vector2(0, -14)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_5k0d4"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_d23sc"]
 _data = {
 &"Idle": SubResource("Animation_gfmwy"),
 &"RESET": SubResource("Animation_srysr"),
 &"Walk": SubResource("Animation_d23sc")
 }
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gmfve"]
-properties/0/path = NodePath(".:multiplayer_position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:multiplayer_input")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("AnimationPlayer:current_animation")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath("AnimatedSprite2D:flip_h")
-properties/3/spawn = true
-properties/3/replication_mode = 1
+[sub_resource type="LabelSettings" id="LabelSettings_srysr"]
 
-[node name="Player" type="CharacterBody2D" unique_id=1158685969]
+[sub_resource type="CircleShape2D" id="CircleShape2D_5k0d4"]
+radius = 24.0
+
+[node name="Player" unique_id=872261653 instance=ExtResource("1_gfmwy")]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_bkjfp")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=761670582]
-shape = SubResource("CircleShape2D_gmfve")
+[node name="CollisionShape2D" parent="." index="0" unique_id=204835547]
+shape = SubResource("CircleShape2D_srysr")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=768710121]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." index="2" unique_id=1080625381]
+replication_config = SubResource("SceneReplicationConfig_srysr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="3" unique_id=1534485863]
 position = Vector2(0, -13.999999)
 scale = Vector2(0.515625, 0.515625)
-sprite_frames = SubResource("SpriteFrames_pt4dq")
+sprite_frames = SubResource("SpriteFrames_srysr")
 animation = &"Walk"
+script = ExtResource("5_gfmwy")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2078751958]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="4" unique_id=2090747369]
 root_node = NodePath("../AnimatedSprite2D")
-libraries/ = SubResource("AnimationLibrary_5k0d4")
+libraries/ = SubResource("AnimationLibrary_d23sc")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1948760595]
-replication_config = SubResource("SceneReplicationConfig_gmfve")
-
-[node name="UsernameLabel" type="Label" parent="." unique_id=1959228927]
+[node name="UsernameLabel" type="Label" parent="." index="5" unique_id=371850439]
 offset_left = -142.0
 offset_top = -60.0
 offset_right = 142.0
 offset_bottom = -37.0
+label_settings = SubResource("LabelSettings_srysr")
 horizontal_alignment = 1
 
-[connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]
+[node name="HurtBox" type="Area2D" parent="." index="6" unique_id=1490933356]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("5_iitbv")
+metadata/_custom_type_script = "uid://cbl2i2u58cfmt"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" index="0" unique_id=958398823]
+shape = SubResource("CircleShape2D_5k0d4")
+debug_color = Color(0.86036474, 0.36250404, 0, 0.41960785)
