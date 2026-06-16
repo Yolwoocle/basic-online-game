@@ -76,6 +76,11 @@ ui_send_message={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="World"
+2d_physics/layer_2="Actor"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

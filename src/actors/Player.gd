@@ -4,6 +4,7 @@ extends Actor
 @onready var username_label: Label = $UsernameLabel
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var life_component: LifeComponent = $LifeComponent
 
 var user: UserData
 var user_id = -1
@@ -18,9 +19,6 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	if user:
-		username_label.text = user.username
-		if user.is_local():
-			username_label.text = "[%s]" % [username_label.text]
 		set_skin(user.skin)
 
 
@@ -34,6 +32,11 @@ func _physics_process(delta: float) -> void:
 	super(delta)
 	
 	move_and_slide()
+	if user:
+		username_label.text = user.username
+		if user.is_local():
+			username_label.text = "[%s]" % [username_label.text]
+		username_label.text += "\nHP: %s/%s" % [life_component.life, life_component.max_life]
 
 
 func set_user_id(_user_id: int):

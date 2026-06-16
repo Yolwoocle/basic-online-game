@@ -54,7 +54,7 @@ func add_local_user() -> int:
 	user.user_id = user_id
 	
 	local_users[user_id] = user
-	register_user.rpc_id(1, user_id, user.to_dict())
+	request_register_user(user_id, user.to_dict())
 	
 	return user_id
 
@@ -66,7 +66,7 @@ func remove_local_user(user_id: int):
 	if not user.is_local():
 		return
 	
-	unregister_user.rpc_id(1, user.user_id)
+	request_unregister_user(user.user_id)
 	local_users.erase(user.user_id)
 
 
@@ -130,6 +130,14 @@ func get_user_multiplayer_id(user_id: int):
 	return user.multiplayer_id
 
 
+func get_users_with_multiplayer_id(mutiplayer_id: int): # -> Array[UserData]
+	var out = []
+	for user_id in users:
+		if users[user_id].multiplayer_id == mutiplayer_id:
+			out.append(users[user_id])
+	return out
+
+
 func is_user_local(user_id: int):
 	if not has_user(user_id):
 		return -1
@@ -190,6 +198,14 @@ func create_client(ip_address: String, port: int = DEFAULT_PORT) -> Error:
 	return err
 
 
+func request_register_user(user_id: int, user_dict: Dictionary) -> void:
+	register_user.rpc_id(1, user_id, user_dict)
+
+
+func request_unregister_user(user_id: int) -> void:
+	unregister_user.rpc_id(1, user_id)
+
+
 @rpc("authority", "call_local", "reliable")
 func _add_user(user_id: int, user_dict: Dictionary) -> void:
 	users[user_id] = UserData.from_dict(user_dict)
@@ -230,7 +246,7 @@ func _on_peer_disconnected(multiplayer_id: int) -> void:
 	if is_server():
 		for user_id in users.keys():
 			if users[user_id].multiplayer_id == multiplayer_id:
-				unregister_user.rpc_id(1, user_id)
+				request_unregister_user(user_id)
 
 
 func _on_server_opened() -> void:
@@ -243,7 +259,7 @@ func _on_connected_to_server() -> void:
 	# Register users to the server
 	for user in local_users.values():
 		user.multiplayer_id = get_multiplayer_id()
-		register_user.rpc_id(1, user.user_id, user.to_dict())
+		request_register_user(user.user_id, user.to_dict())
 
 
 func _on_connection_failed() -> void:

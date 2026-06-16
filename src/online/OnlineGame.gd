@@ -36,7 +36,7 @@ func start_game():
 	if Online.is_server():
 		loaded_clients = 0
 		are_all_clients_loaded = false
-		_load_game_scene.rpc("res://src/scenes/Level.tscn")
+		_load_game_scene.rpc("res://src/scenes/level/Level.tscn")
 
 
 func quit_game():
